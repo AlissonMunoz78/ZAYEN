@@ -1,0 +1,314 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== FUENTES ===== */
+:root {
+  --font-title: 'EB Garamond', Georgia, serif;
+  --font-body: 'Source Sans 3', system-ui, sans-serif;
+
+  /* Colores del favicon */
+  --c-cyan: #00D4C8;
+  --c-cyan-soft: #00BDB2;
+  --c-purple: #6B35C8;
+  --c-magenta: #E8166B;
+
+  /* Modo oscuro (default) */
+  --bg-primary: #0D1B2A;
+  --bg-secondary: #122436;
+  --bg-tertiary: #1a3049;
+  --bg-card: rgba(255,255,255,0.06);
+  --bg-card-hover: rgba(255,255,255,0.10);
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8CDD9;
+  --text-muted: #6B8FA8;
+
+  --border-color: rgba(255,255,255,0.10);
+  --border-accent: rgba(0,212,200,0.35);
+
+  --shadow-card: 0 4px 32px rgba(0,0,0,0.45);
+
+  --sidebar-w: 268px;
+  --sidebar-w-collapsed: 68px;
+}
+
+/* ===== MODO CLARO ===== */
+html.light {
+  --bg-primary: #F4F2ED;
+  --bg-secondary: #E8E5DE;
+  --bg-tertiary: #DDDAD2;
+  --bg-card: rgba(255,255,255,0.90);
+  --bg-card-hover: rgba(255,255,255,1);
+
+  --text-primary: #0D1B2A;
+  --text-secondary: #2C4A5E;
+  --text-muted: #6B8FA8;
+
+  --border-color: rgba(0,0,0,0.09);
+  --border-accent: rgba(0,189,178,0.45);
+
+  --shadow-card: 0 4px 32px rgba(0,0,0,0.10);
+}
+
+/* ===== RESET Y BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: background 0.3s, color 0.3s;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-title);
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--c-cyan); border-radius: 3px; }
+
+/* ===== GLASS CARD ===== */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid var(--border-color);
+  border-radius: 16px;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.glass-card:hover { background: var(--bg-card-hover); }
+
+/* ===== BOTONES ===== */
+.btn-primary {
+  background: linear-gradient(135deg, var(--c-cyan), var(--c-purple));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+.btn-outline {
+  background: transparent;
+  color: var(--c-cyan);
+  border: 1.5px solid var(--c-cyan);
+  border-radius: 8px;
+  padding: 11px 26px;
+  font-size: 16px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-outline:hover { background: var(--c-cyan); color: var(--c-dark, #0D1B2A); }
+
+/* ===== INPUTS ===== */
+.input-field {
+  width: 100%;
+  background: var(--bg-tertiary);
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  padding: 13px 18px;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: var(--font-body);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--c-cyan);
+  box-shadow: 0 0 0 3px rgba(0,212,200,0.15);
+}
+.input-field::placeholder { color: var(--text-muted); }
+select.input-field { cursor: pointer; }
+textarea.input-field { resize: vertical; }
+
+/* ===== LABEL ===== */
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 7px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* ===== BADGE ===== */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ===== TABLE ===== */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  border-bottom: 1px solid var(--border-color);
+}
+.data-table td {
+  padding: 16px 18px;
+  font-size: 16px;
+  color: var(--text-primary);
+  border-bottom: 0.5px solid var(--border-color);
+  font-family: var(--font-body);
+}
+.data-table tr:hover td { background: var(--bg-card-hover); }
+.data-table tr:last-child td { border-bottom: none; }
+
+/* ===== SIDEBAR (modo claro arreglado) ===== */
+.sidebar {
+  background: var(--bg-secondary);
+  border-right: 0.5px solid var(--border-color);
+  transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+  flex-shrink: 0;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* Sidebar nav links */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  text-decoration: none;
+  font-size: 16px;
+  font-family: var(--font-body);
+  color: var(--text-secondary);
+  background: transparent;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sidebar-link:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+.sidebar-link.active {
+  background: rgba(0,212,200,0.12);
+  color: var(--c-cyan);
+  border-left-color: var(--c-cyan);
+}
+html.light .sidebar-link { color: var(--text-secondary); }
+html.light .sidebar-link:hover { background: rgba(0,0,0,0.05); color: var(--text-primary); }
+html.light .sidebar-link.active { background: rgba(0,212,200,0.12); color: var(--c-cyan-soft, #00BDB2); }
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text {
+  background: linear-gradient(135deg, var(--c-cyan), var(--c-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== ACCENT LINE ===== */
+.accent-line {
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--c-cyan), var(--c-purple));
+  border-radius: 2px;
+  margin: 16px 0;
+}
+
+/* ===== PAGE TRANSITION ===== */
+.page-enter {
+  animation: pageIn 0.3s ease forwards;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== CATEGORY LABEL (estilo Louvre) ===== */
+.cat-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--c-cyan);
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* ===== TOAST OVERRIDE ===== */
+.Toastify__toast {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 0.5px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  font-family: var(--font-body) !important;
+  font-size: 15px !important;
+}
+
+/* ===== MODAL OVERLAY ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.modal-box {
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--border-color);
+  border-radius: 20px;
+  padding: 48px;
+  width: 100%;
+  max-width: 460px;
+  animation: slideUp 0.3s ease;
+  position: relative;
+}
+@keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+/* ===== SPIN ===== */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { animation: spin 1s linear infinite; }
+
+/* ===== PULSE ===== */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
