@@ -26,11 +26,11 @@ const LoginModal = ({ onClose }) => {
     try {
       const r = await api.post(`${BASE_URL}/admin/login`, form);
 
-      if (r.data.token) {
+      if (r.data?.token) {
         setToken(r.data.token);
-        setRol(r.data.admin.rol);
+        setRol(r.data.admin?.rol);
         toast.success(r.data.msg);
-        onClose();
+        onClose?.();
         navigate('/dashboard');
       }
     } catch (err) {
@@ -47,7 +47,7 @@ const LoginModal = ({ onClose }) => {
   };
 
   const handleOverlayClick = e => {
-    if (e.target === e.currentTarget) onClose();
+    if (e.target === e.currentTarget) onClose?.();
   };
 
   return (
@@ -183,6 +183,7 @@ const LoginModal = ({ onClose }) => {
         {/* Google */}
         <button
           onClick={handleGoogle}
+          disabled={loading}
           style={{ width: '100%', marginTop: '16px' }}
         >
           Continuar con Google
