@@ -180,14 +180,53 @@ const LoginModal = ({ onClose }) => {
           </button>
         </form>
 
-        {/* Google */}
+        {/* Divisor */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          margin: '24px 0',
+          gap: '14px'
+        }}>
+          <div style={{ flex: 1, height: '0.5px', background: 'var(--border-color)' }} />
+          <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>O</span>
+          <div style={{ flex: 1, height: '0.5px', background: 'var(--border-color)' }} />
+        </div>
+
+        {/* Botón Google estilo imagen */}
         <button
           onClick={handleGoogle}
           disabled={loading}
-          style={{ width: '100%', marginTop: '16px' }}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            padding: '14px',
+            borderRadius: '30px',
+            border: '1px solid rgba(255,255,255,0.2)',
+            background: 'transparent',
+            color: '#fff',
+            fontSize: '16px',
+            cursor: 'pointer',
+            backdropFilter: 'blur(6px)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = 'transparent';
+          }}
         >
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            alt="google"
+            style={{ width: '20px', height: '20px' }}
+          />
           Continuar con Google
         </button>
+
       </div>
     </div>
   );
