@@ -13,6 +13,9 @@ import {
   FaChevronDown,
   FaSun,
   FaMoon,
+  FaHome,
+  FaBuilding,
+  FaTimes,
 } from "react-icons/fa";
 import { FaFacebook, FaSquareInstagram } from "react-icons/fa6";
 import themeStore from "../context/themeStore";
@@ -386,7 +389,7 @@ export const Home = () => {
               (e.currentTarget.style.transform = "rotate(0)")
             }
           >
-            ✕
+            <FaTimes size={24} />
           </button>
         </div>
 
@@ -401,11 +404,11 @@ export const Home = () => {
           }}
         >
           {[
-            ["#inicio", "🏠", "Inicio"],
-            ["#nosotros", "🏛️", "Nosotros"],
-            ["#servicios", "✨", "Servicios"],
-            ["#contacto", "📍", "Contacto"],
-          ].map(([href, emoji, label]) => (
+            { href: "#inicio", icon: FaHome, label: "Inicio" },
+            { href: "#nosotros", icon: FaBuilding, label: "Nosotros" },
+            { href: "#servicios", icon: FaDonate, label: "Servicios" },
+            { href: "#contacto", icon: FaMapMarkerAlt, label: "Contacto" },
+          ].map(({ href, icon: Icon, label }) => (
             <a
               key={href}
               href={href}
@@ -435,7 +438,7 @@ export const Home = () => {
                 e.currentTarget.style.borderColor = "transparent";
               }}
             >
-              <span style={{ fontSize: "18px" }}>{emoji}</span>
+              <Icon style={{ fontSize: "16px", color: "var(--c-cyan)" }} />
               <span>{label}</span>
             </a>
           ))}
@@ -516,11 +519,11 @@ export const Home = () => {
           >
             {isDark ? (
               <>
-                <span>☀️</span> Modo claro
+                <FaSun size={14} /> Modo claro
               </>
             ) : (
               <>
-                <span>🌙</span> Modo oscuro
+                <FaMoon size={14} /> Modo oscuro
               </>
             )}
           </button>

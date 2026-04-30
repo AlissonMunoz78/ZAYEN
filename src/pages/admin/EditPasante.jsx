@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaExclamationTriangle } from "react-icons/fa";
 import api from "../../api/axios";
 import storeAuth from "../../context/storeAuth";
 import FormCard from "../../components/FormCard";
@@ -120,9 +120,13 @@ const EditPasante = () => {
             borderRadius: "8px",
             fontSize: "13px",
             color: "#f472b6",
+            display: "flex",
+            gap: "10px",
+            alignItems: "flex-start",
           }}
         >
-          ⚠️ Como admini estudiante, solo puedes editar el celular.
+          <FaExclamationTriangle style={{ marginTop: "2px", flexShrink: 0 }} />
+          <div>Como admini estudiante, solo puedes editar el celular.</div>
         </div>
       )}
       <form onSubmit={handleSubmit}>

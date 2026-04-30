@@ -16,7 +16,7 @@ const LoginModal = ({ onClose }) => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  // ✅ Variable correcta en Vite
+  // Variable correcta en Vite
   const BASE_URL =
     import.meta.env.VITE_URL_BACKEND ||
     "https://backend-zayen.onrender.com/api";
