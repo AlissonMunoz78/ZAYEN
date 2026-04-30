@@ -1,12 +1,13 @@
-import axios from 'axios';
-import storeAuth from '../context/storeAuth';
+import axios from "axios";
+import storeAuth from "../context/storeAuth";
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://backend-zayen.onrender.com/api';
+const API_URL =
+  import.meta.env.VITE_URL_BACKEND || "https://backend-zayen.onrender.com/api";
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   timeout: 30000, // 30 segundos
 });
@@ -22,7 +23,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Interceptor para manejar errores de respuesta
@@ -32,10 +33,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Token inválido o expirado
       storeAuth.getState().clearToken();
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

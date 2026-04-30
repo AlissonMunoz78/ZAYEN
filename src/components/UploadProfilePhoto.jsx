@@ -1,27 +1,32 @@
-import { useState, useRef } from 'react';
-import { toast } from 'react-toastify';
-import { FaCamera, FaSpinner, FaTimes } from 'react-icons/fa';
-import api from '../api/axios';
+import { useState, useRef } from "react";
+import { toast } from "react-toastify";
+import { FaCamera, FaSpinner, FaTimes } from "react-icons/fa";
+import api from "../api/axios";
 
-const UploadProfilePhoto = ({ userId, currentPhoto, userType = 'admin', onPhotoUpdate }) => {
+const UploadProfilePhoto = ({
+  userId,
+  currentPhoto,
+  userType = "admin",
+  onPhotoUpdate,
+}) => {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentPhoto);
   const fileInputRef = useRef(null);
 
   const handleFileSelect = async (e) => {
     const file = e.target.files[0];
-    
+
     if (!file) return;
 
     // Validar tipo de archivo
-    if (!file.type.startsWith('image/')) {
-      toast.error('Solo se permiten archivos de imagen');
+    if (!file.type.startsWith("image/")) {
+      toast.error("Solo se permiten archivos de imagen");
       return;
     }
 
     // Validar tamaño (5MB máximo)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('La imagen no debe superar 5MB');
+      toast.error("La imagen no debe superar 5MB");
       return;
     }
 
@@ -36,24 +41,23 @@ const UploadProfilePhoto = ({ userId, currentPhoto, userType = 'admin', onPhotoU
     setUploading(true);
 
     const formData = new FormData();
-    formData.append('fotoPerfil', file);
+    formData.append("fotoPerfil", file);
 
     try {
-      const endpoint = userType === 'pasante' 
-        ? '/pasante/perfil/foto'
-        : `/admin/perfil/${userId}/foto`;
+      const endpoint =
+        userType === "pasante" ? "/pasante/perfil/foto" : "/admin/perfil/foto";
 
       const response = await api.put(endpoint, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success('Foto de perfil actualizada');
-      
+      toast.success("Foto de perfil actualizada");
+
       if (onPhotoUpdate) {
         onPhotoUpdate(response.data.fotoPerfil);
       }
     } catch (error) {
-      toast.error(error.response?.data?.msg || 'Error al subir foto');
+      toast.error(error.response?.data?.msg || "Error al subir foto");
       setPreview(currentPhoto); // Revertir preview
     } finally {
       setUploading(false);
@@ -63,7 +67,7 @@ const UploadProfilePhoto = ({ userId, currentPhoto, userType = 'admin', onPhotoU
   const handleRemovePhoto = () => {
     setPreview(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -82,7 +86,7 @@ const UploadProfilePhoto = ({ userId, currentPhoto, userType = 'admin', onPhotoU
             <FaCamera className="text-4xl text-gray-400" />
           )}
         </div>
-        
+
         {uploading && (
           <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
             <FaSpinner className="text-white text-2xl animate-spin" />
@@ -100,13 +104,13 @@ const UploadProfilePhoto = ({ userId, currentPhoto, userType = 'admin', onPhotoU
           className="hidden"
           id="photo-upload"
         />
-        
+
         <label
           htmlFor="photo-upload"
-          className={`bg-teal-800 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition cursor-pointer flex items-center space-x-2 ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`bg-teal-800 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition cursor-pointer flex items-center space-x-2 ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           <FaCamera />
-          <span>{preview ? 'Cambiar foto' : 'Subir foto'}</span>
+          <span>{preview ? "Cambiar foto" : "Subir foto"}</span>
         </label>
 
         {preview && !uploading && (

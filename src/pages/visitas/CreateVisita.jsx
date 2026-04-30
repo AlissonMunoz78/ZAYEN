@@ -47,7 +47,11 @@ const CreateVisita = () => {
     }
     setLoading(true);
     try {
-      await api.post("/visitas", form);
+      const payload = {
+        ...form,
+        cantidadPersonas: Number(form.cantidadPersonas),
+      };
+      await api.post("/visitas", payload);
       toast.success("Visita registrada");
       navigate("/visitas");
     } catch (err) {
