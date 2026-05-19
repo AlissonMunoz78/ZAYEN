@@ -200,7 +200,7 @@ const Dashboard = () => {
           }}
         >
           <StatCard
-            title="Visitas registradas"
+            title="Reservas registradas"
             value={stats.visitas}
             icon={FaCalendarAlt}
             color="#00D4C8"
@@ -256,7 +256,7 @@ const Dashboard = () => {
         >
           {[
             {
-              label: "Registrar visita",
+              label: "Registrar reserva",
               to: "/visitas/crear",
               color: "#00D4C8",
             },

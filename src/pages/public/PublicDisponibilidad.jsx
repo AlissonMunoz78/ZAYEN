@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaSearch, FaArrowLeft, FaClipboardList } from "react-icons/fa";
+import { jsPDF } from "jspdf";
 import api from "../../api/axios";
 
 const PublicDisponibilidad = () => {
@@ -17,6 +18,7 @@ const PublicDisponibilidad = () => {
     cantidadPersonas: 1,
   });
   const [errors, setErrors] = useState({ institucion: "" });
+  const [confirmedReservation, setConfirmedReservation] = useState(null);
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -93,10 +95,16 @@ const PublicDisponibilidad = () => {
 
       toast.success("Reserva registrada");
 
-      cerrarModal();
+      const reservation = {
+        institucion: form.institucion,
+        cantidadPersonas: cantPersonas,
+        fechaVisita: fecha,
+        horaBloque: bloqueSeleccionado.hora,
+      };
+
+      setConfirmedReservation(reservation);
 
       const r = await api.get(`/publico/visitas/disponibilidad?fecha=${fecha}`);
-
       setData(r.data);
     } catch (err) {
       toast.error(err.response?.data?.msg || "Error al reservar");
@@ -189,6 +197,105 @@ const PublicDisponibilidad = () => {
           </div>
         )}
 
+        {/* Confirmation modal with download after reservation */}
+        {confirmedReservation && (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.6)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1200,
+            }}
+            onClick={() => setConfirmedReservation(null)}
+          >
+            <div
+              className="glass-card"
+              style={{ padding: "28px", width: "100%", maxWidth: "480px" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 style={{ marginTop: 0 }}>Reserva registrada</h3>
+              <div
+                style={{ marginBottom: "12px", color: "var(--text-secondary)" }}
+              >
+                Institución:{" "}
+                <strong style={{ color: "var(--text-primary)" }}>
+                  {confirmedReservation.institucion}
+                </strong>
+              </div>
+              <div
+                style={{ marginBottom: "12px", color: "var(--text-secondary)" }}
+              >
+                Fecha:{" "}
+                <strong style={{ color: "var(--text-primary)" }}>
+                  {confirmedReservation.fechaVisita}
+                </strong>
+              </div>
+              <div
+                style={{ marginBottom: "18px", color: "var(--text-secondary)" }}
+              >
+                Hora:{" "}
+                <strong style={{ color: "var(--text-primary)" }}>
+                  {confirmedReservation.horaBloque}
+                </strong>{" "}
+                — Personas:{" "}
+                <strong style={{ color: "var(--text-primary)" }}>
+                  {confirmedReservation.cantidadPersonas}
+                </strong>
+              </div>
+              <div style={{ display: "flex", gap: "12px" }}>
+                <button
+                  className="btn-outline"
+                  onClick={() => setConfirmedReservation(null)}
+                  style={{ flex: 1 }}
+                >
+                  Cerrar
+                </button>
+                <button
+                  className="btn-primary"
+                  style={{ flex: 1 }}
+                  onClick={() => {
+                    try {
+                      const doc = new jsPDF();
+                      doc.setFontSize(16);
+                      doc.text("Reserva - Museo Gustavo Orcés", 14, 20);
+                      doc.setFontSize(12);
+                      doc.text(
+                        `Institución: ${confirmedReservation.institucion}`,
+                        14,
+                        36,
+                      );
+                      doc.text(
+                        `Fecha: ${confirmedReservation.fechaVisita}`,
+                        14,
+                        46,
+                      );
+                      doc.text(
+                        `Hora: ${confirmedReservation.horaBloque}`,
+                        14,
+                        56,
+                      );
+                      doc.text(
+                        `Personas: ${confirmedReservation.cantidadPersonas}`,
+                        14,
+                        66,
+                      );
+                      const fname = `reserva_${confirmedReservation.fechaVisita}_${confirmedReservation.horaBloque}.pdf`;
+                      doc.save(fname);
+                    } catch (e) {
+                      toast.error("Error generando PDF");
+                    }
+                  }}
+                >
+                  Descargar PDF
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {modalOpen && (
           <div
             style={{
@@ -229,7 +336,7 @@ const PublicDisponibilidad = () => {
                     marginBottom: "8px",
                   }}
                 >
-                  RESERVAR VISITA
+                  RESERVAR
                 </div>
                 <h2
                   style={{
@@ -340,12 +447,13 @@ const PublicDisponibilidad = () => {
                   min="1"
                   max="20"
                   value={form.cantidadPersonas}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const v = e.target.value;
                     setForm({
                       ...form,
-                      cantidadPersonas: parseInt(e.target.value, 10) || 1,
-                    })
-                  }
+                      cantidadPersonas: v === "" ? "" : parseInt(v, 10),
+                    });
+                  }}
                   style={{
                     width: "100%",
                     padding: "12px 16px",

@@ -38,7 +38,7 @@ const VisitasList = () => {
     if (status === "cancelada" && !descripcion) return;
     try {
       await api.patch(`/visitas/${id}/estado`, { status, descripcion });
-      toast.success(`Visita marcada como ${status}`);
+      toast.success(`Reserva marcada como ${status}`);
       fetchVisitas();
     } catch (e) {
       toast.error(e.response?.data?.msg || "Error al actualizar");
@@ -63,34 +63,20 @@ const VisitasList = () => {
     };
   };
 
-  const generatePDF = () => {
-    if (!visitas || visitas.length === 0) {
-      toast.info("No hay reservas para exportar");
-      return;
-    }
+  const generatePDFFor = (v) => {
+    if (!v) return toast.info("Reserva inválida");
     try {
       const doc = new jsPDF();
       doc.setFontSize(16);
-      doc.text("Reporte de Reservas", 14, 20);
-      doc.setFontSize(11);
-      let y = 30;
-      visitas.forEach((v, i) => {
-        if (y > 270) {
-          doc.addPage();
-          y = 20;
-        }
-        doc.text(`${i + 1}. Institución: ${v.institucion || "-"}`, 14, y);
-        y += 6;
-        const fecha = v.fechaVisita || v.fecha || v.createdAt || "-";
-        doc.text(
-          `Fecha: ${fecha}    Hora: ${v.horaBloque || "-"}    Personas: ${v.cantidadPersonas || "-"}`,
-          14,
-          y,
-        );
-        y += 8;
-      });
-      const filename = `reservas_${new Date().toISOString().slice(0, 10)}.pdf`;
-      doc.save(filename);
+      doc.text("Reserva - Museo Gustavo Orcés", 14, 20);
+      doc.setFontSize(12);
+      doc.text(`Institución: ${v.institucion || "-"}`, 14, 36);
+      const fecha = v.fechaVisita || v.fecha || v.createdAt || "-";
+      doc.text(`Fecha: ${fecha}`, 14, 46);
+      doc.text(`Hora: ${v.horaBloque || "-"}`, 14, 56);
+      doc.text(`Personas: ${v.cantidadPersonas || "-"}`, 14, 66);
+      const fname = `reserva_${(fecha + "").replace(/[:\s]/g, "_")}.pdf`;
+      doc.save(fname);
     } catch (e) {
       toast.error("Error generando PDF");
     }
@@ -100,24 +86,9 @@ const VisitasList = () => {
     <div>
       <PageHeader
         category="GESTIÓN"
-        title="Visitas"
+        title="Reservas"
         action={
           <div style={{ display: "flex", gap: "12px" }}>
-            <button
-              onClick={generatePDF}
-              className="btn-outline"
-              style={{
-                textDecoration: "none",
-                padding: "10px 20px",
-                borderRadius: "8px",
-                fontSize: "13px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <FaCalendarAlt size={12} /> Descargar PDF
-            </button>
             <Link
               to="/visitas/disponibilidad"
               className="btn-outline"
@@ -141,7 +112,7 @@ const VisitasList = () => {
                 fontSize: "13px",
               }}
             >
-              <FaPlus size={12} /> Nueva visita
+              <FaPlus size={12} /> Nueva reserva
             </Link>
           </div>
         }
@@ -184,50 +155,67 @@ const VisitasList = () => {
                     <span style={badgeStyle(v.status)}>{v.status}</span>
                   </td>
                   <td style={{ textAlign: "center" }}>
-                    {v.status === "pendiente" && (
-                      <div
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "8px",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {v.status === "pendiente" && (
+                        <>
+                          <button
+                            onClick={() => handleStatus(v.id, "realizada")}
+                            style={{
+                              background: "rgba(0,212,200,0.12)",
+                              color: "#00D4C8",
+                              border: "none",
+                              borderRadius: "6px",
+                              padding: "6px 12px",
+                              cursor: "pointer",
+                              fontSize: "12px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px",
+                            }}
+                          >
+                            <FaCheckCircle size={12} /> Realizada
+                          </button>
+                          <button
+                            onClick={() => handleStatus(v.id, "cancelada")}
+                            style={{
+                              background: "rgba(232,22,107,0.12)",
+                              color: "#E8166B",
+                              border: "none",
+                              borderRadius: "6px",
+                              padding: "6px 12px",
+                              cursor: "pointer",
+                              fontSize: "12px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px",
+                            }}
+                          >
+                            <FaTimesCircle size={12} /> Cancelar
+                          </button>
+                        </>
+                      )}
+                      <button
+                        onClick={() => generatePDFFor(v)}
                         style={{
-                          display: "flex",
-                          gap: "8px",
-                          justifyContent: "center",
+                          background: "rgba(107,53,200,0.12)",
+                          color: "#6B35C8",
+                          border: "none",
+                          borderRadius: "6px",
+                          padding: "6px 10px",
+                          cursor: "pointer",
+                          fontSize: "12px",
                         }}
                       >
-                        <button
-                          onClick={() => handleStatus(v.id, "realizada")}
-                          style={{
-                            background: "rgba(0,212,200,0.12)",
-                            color: "#00D4C8",
-                            border: "none",
-                            borderRadius: "6px",
-                            padding: "6px 12px",
-                            cursor: "pointer",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                        >
-                          <FaCheckCircle size={12} /> Realizada
-                        </button>
-                        <button
-                          onClick={() => handleStatus(v.id, "cancelada")}
-                          style={{
-                            background: "rgba(232,22,107,0.12)",
-                            color: "#E8166B",
-                            border: "none",
-                            borderRadius: "6px",
-                            padding: "6px 12px",
-                            cursor: "pointer",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                        >
-                          <FaTimesCircle size={12} /> Cancelar
-                        </button>
-                      </div>
-                    )}
+                        Descargar PDF
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -245,7 +233,7 @@ const VisitasList = () => {
             <FaCalendarAlt
               style={{ fontSize: "32px", marginBottom: "12px", opacity: 0.4 }}
             />
-            <p>No hay visitas registradas</p>
+            <p>No hay reservas registradas</p>
           </div>
         )}
       </div>

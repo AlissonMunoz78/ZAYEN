@@ -82,7 +82,7 @@ const CreateVisita = () => {
       };
       console.log("Enviando payload:", payload);
       await api.post("/visitas", payload);
-      toast.success("¡Visita registrada exitosamente!");
+      toast.success("¡Reserva registrada exitosamente!");
       navigate("/visitas");
     } catch (err) {
       toast.error(err.response?.data?.msg || "Error al registrar la visita");
@@ -151,46 +151,46 @@ const CreateVisita = () => {
                 color: "var(--c-cyan)",
                 letterSpacing: "2px",
                 fontWeight: "600",
-              }}
-            >
-              NUEVA VISITA
-            </div>
-            <h1
-              style={{
-                fontSize: "28px",
-                fontWeight: "700",
-                color: "var(--text-primary)",
-                margin: "4px 0 0 0",
-              }}
-            >
-              Registrar Visita Grupal
-            </h1>
-          </div>
-        </div>
-
-        {/* Info Alert */}
-        <div
-          style={{
-            marginBottom: "24px",
-            padding: "16px 20px",
-            background:
-              "linear-gradient(135deg, rgba(0,212,200,0.1), rgba(107,53,200,0.05))",
-            border: "1px solid rgba(0,212,200,0.2)",
-            borderRadius: "12px",
-            fontSize: "14px",
-            color: "var(--text-secondary)",
-            lineHeight: "1.6",
-            display: "flex",
-            gap: "12px",
-            alignItems: "flex-start",
-          }}
-        >
-          <FaInfoCircle
-            style={{
-              color: "var(--c-cyan)",
-              marginTop: "2px",
-              flexShrink: 0,
-              fontSize: "16px",
+              <button
+                type="submit"
+                disabled={
+                  loading ||
+                  !form.horaBloque ||
+                  !form.cantidadPersonas ||
+                  !form.fechaVisita ||
+                  !form.institucion ||
+                  Number(form.cantidadPersonas) < 1 ||
+                  Number(form.cantidadPersonas) > 20
+                }
+                style={{
+                  flex: 2,
+                  padding: "13px 20px",
+                  background: loading
+                    ? "rgba(0,212,200,0.5)"
+                    : "linear-gradient(135deg, var(--c-cyan), #00A89A)",
+                  border: "none",
+                  borderRadius: "10px",
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  transition: "all 0.2s",
+                  opacity: loading ? 0.7 : 1,
+                }}
+                onMouseEnter={(e) => {
+                  if (!loading) {
+                    e.target.style.transform = "translateY(-2px)";
+                    e.target.style.boxShadow =
+                      "0 10px 24px rgba(0,212,200,0.3)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = "none";
+                  e.target.style.boxShadow = "none";
+                }}
+              >
+                {loading ? "Registrando..." : "Registrar reserva"}
+              </button>
             }}
           />
           <div>

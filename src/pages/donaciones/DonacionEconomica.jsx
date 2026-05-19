@@ -113,7 +113,7 @@ const DonacionEconomica = () => {
             className="btn-primary"
             style={{ flex: 2 }}
           >
-            {processing ? "Procesando..." : "Proceder al pago"}
+            {processing ? "Procesando..." : "Realizar donación"}
           </button>
         </div>
       </form>

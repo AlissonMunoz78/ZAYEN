@@ -75,7 +75,7 @@ const Disponibilidad = () => {
 
   return (
     <div>
-      <PageHeader category="VISITAS" title="Consultar disponibilidad" />
+      <PageHeader category="RESERVAS" title="Consultar disponibilidad" />
 
       <div
         className="glass-card"

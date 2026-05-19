@@ -40,12 +40,18 @@ const PasantesList = () => {
       `${current === false ? "¿Activar" : "¿Desactivar"} este pasante?`,
     );
     if (!confirm) return;
+    // optimistic update
+    const prev = pasantes;
+    setPasantes((ps) =>
+      ps.map((p) => (p._id === id ? { ...p, activo: !current } : p)),
+    );
     try {
       await api.put(`/admin/pasantes/${id}`, { activo: !current });
       toast.success("Estado actualizado");
-      fetchPasantes();
     } catch (e) {
       toast.error(e.response?.data?.msg || "Error");
+      // revert
+      setPasantes(prev);
     }
   };
 
