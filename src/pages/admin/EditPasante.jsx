@@ -154,16 +154,24 @@ const EditPasante = () => {
                 name="facultad"
                 value={form.facultad}
                 onChange={h}
-          <div style={{ marginTop: "10px" }}>
-            <strong style={{ color: "var(--text-primary)" }}>Estado:</strong>{" "}
-            <span style={{ color: pasante.activo === false ? "#E8166B" : "#00D4C8", fontWeight: 600 }}>
-              {pasante.activo === false ? "Inactivo" : "Activo"}
-            </span>
-          </div>
                 placeholder="Ingeniería de Sistemas"
                 className="input-field"
                 required
               />
+
+              <div style={{ marginTop: "10px" }}>
+                <strong style={{ color: "var(--text-primary)" }}>
+                  Estado:
+                </strong>{" "}
+                <span
+                  style={{
+                    color: pasante?.activo === false ? "#E8166B" : "#00D4C8",
+                    fontWeight: 600,
+                  }}
+                >
+                  {pasante?.activo === false ? "Inactivo" : "Activo"}
+                </span>
+              </div>
             </div>
             <div style={{ marginBottom: "24px" }}>
               <label className="field-label">Horas de pasantía</label>
@@ -178,14 +186,20 @@ const EditPasante = () => {
             </div>
             <div style={{ marginBottom: "20px" }}>
               <label className="field-label">Activo</label>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "12px" }}
+              >
                 <input
                   type="checkbox"
                   name="activo"
                   checked={!!form.activo}
-                  onChange={(e) => setForm({ ...form, activo: e.target.checked })}
+                  onChange={(e) =>
+                    setForm({ ...form, activo: e.target.checked })
+                  }
                 />
-                <small style={{ color: "var(--text-secondary)" }}>Marcar si el pasante está activo</small>
+                <small style={{ color: "var(--text-secondary)" }}>
+                  Marcar si el pasante está activo
+                </small>
               </div>
             </div>
           </>
