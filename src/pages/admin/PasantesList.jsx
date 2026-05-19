@@ -35,6 +35,20 @@ const PasantesList = () => {
     }
   };
 
+  const handleToggleActive = async (id, current) => {
+    const confirm = window.confirm(
+      `${current === false ? "¿Activar" : "¿Desactivar"} este pasante?`,
+    );
+    if (!confirm) return;
+    try {
+      await api.put(`/admin/pasantes/${id}`, { activo: !current });
+      toast.success("Estado actualizado");
+      fetchPasantes();
+    } catch (e) {
+      toast.error(e.response?.data?.msg || "Error");
+    }
+  };
+
   return (
     <div>
       <PageHeader
@@ -74,6 +88,7 @@ const PasantesList = () => {
                 <th>Nombre</th>
                 <th>Email</th>
                 <th>Facultad</th>
+                <th>Estado</th>
                 <th>Horas</th>
                 <th style={{ textAlign: "center" }}>Acciones</th>
               </tr>
@@ -89,6 +104,23 @@ const PasantesList = () => {
                   </td>
                   <td style={{ color: "var(--text-secondary)" }}>
                     {p.facultad}
+                  </td>
+                  <td>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        padding: "4px 10px",
+                        borderRadius: "16px",
+                        fontSize: "11px",
+                        background: p.activo
+                          ? "rgba(0,212,200,0.08)"
+                          : "rgba(232,22,107,0.06)",
+                        color: p.activo ? "#00D4C8" : "#E8166B",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {p.activo === false ? "Inactivo" : "Activo"}
+                    </span>
                   </td>
                   <td>
                     <span
@@ -128,6 +160,21 @@ const PasantesList = () => {
                       >
                         <FaEdit size={12} />
                       </Link>
+                      <button
+                        onClick={() => handleToggleActive(p._id, p.activo)}
+                        style={{
+                          background: p.activo
+                            ? "rgba(232,22,107,0.08)"
+                            : "rgba(0,212,200,0.12)",
+                          color: p.activo ? "#E8166B" : "#00D4C8",
+                          border: "none",
+                          borderRadius: "6px",
+                          padding: "7px 10px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {p.activo === false ? "Activar" : "Inactivar"}
+                      </button>
                       <button
                         onClick={() => handleDelete(p._id)}
                         style={{

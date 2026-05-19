@@ -121,6 +121,7 @@ const DonacionesList = () => {
               <tr>
                 <th>Donante</th>
                 <th>Institución</th>
+                <th>Fecha</th>
                 <th>Tipo</th>
                 <th>Monto/Descripción</th>
                 <th>Estado</th>
@@ -133,6 +134,11 @@ const DonacionesList = () => {
                   <td style={{ fontWeight: "500" }}>{d.nombreDonante}</td>
                   <td style={{ color: "var(--text-secondary)" }}>
                     {d.institucion}
+                  </td>
+                  <td style={{ color: "var(--text-secondary)" }}>
+                    {new Date(
+                      d.fecha || d.createdAt || d.fechaDonacion || Date.now(),
+                    ).toLocaleDateString("es-EC")}
                   </td>
                   <td>
                     <span

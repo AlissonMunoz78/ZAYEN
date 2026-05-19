@@ -2,10 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== FUENTES ===== */
+/* ===== FUENTES Y BREAKPOINTS ===== */
 :root {
   --font-title: 'EB Garamond', Georgia, serif;
   --font-body: 'Source Sans 3', system-ui, sans-serif;
+
+  /* Breakpoints */
+  --bp-mobile: 320px;
+  --bp-small: 480px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+  --bp-wide: 1440px;
 
   /* Colores del favicon */
   --c-cyan: #00D4C8;
@@ -31,6 +38,15 @@
 
   --sidebar-w: 268px;
   --sidebar-w-collapsed: 68px;
+  
+  /* Responsive spacing */
+  --padding-mobile: 16px;
+  --padding-tablet: 28px;
+  --padding-desktop: 32px;
+  --padding-form: clamp(12px, 3vw, 20px);
+  --gap-mobile: 12px;
+  --gap-tablet: 16px;
+  --gap-desktop: 20px;
 }
 
 /* ===== MODO CLARO ===== */
@@ -247,6 +263,61 @@ textarea.input-field {
   border-bottom: none;
 }
 
+/* Mobile table: convert to cards */
+@media (max-width: 767px) {
+  .data-table,
+  .data-table thead,
+  .data-table tbody,
+  .data-table th,
+  .data-table td,
+  .data-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    background: var(--bg-card);
+  }
+
+  .data-table tbody tr:hover {
+    background: var(--bg-card-hover);
+  }
+
+  .data-table td {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: none !important;
+    text-align: left;
+  }
+
+  .data-table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex: 0 0 35%;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .data-table td > * {
+    flex: 1;
+    text-align: right;
+  }
+}
+
 /* ===== SIDEBAR (modo claro arreglado) ===== */
 .sidebar {
   background: var(--bg-secondary);
@@ -443,8 +514,8 @@ html.light .sidebar-link.active {
   }
 
   .modal-box {
-    max-width: 520px;
-    padding: 36px;
+    max-width: min(520px, 90vw);
+    padding: clamp(24px, 5vw, 36px);
   }
 
   /* Navbar: hide desktop links, show hamburger */
@@ -507,11 +578,19 @@ html.light .sidebar-link.active {
   }
 
   h1 {
-    font-size: clamp(28px, 6vw, 42px) !important;
+    font-size: clamp(24px, 6vw, 40px) !important;
   }
 
   h2 {
-    font-size: clamp(20px, 5.5vw, 32px) !important;
+    font-size: clamp(18px, 5vw, 30px) !important;
+  }
+
+  h3 {
+    font-size: clamp(16px, 4.5vw, 24px) !important;
+  }
+
+  p {
+    font-size: clamp(14px, 3.5vw, 15px) !important;
   }
 
   /* Buttons full width */
@@ -520,22 +599,24 @@ html.light .sidebar-link.active {
     width: 100%;
     display: flex !important;
     justify-content: center;
+    padding: clamp(10px, 3vw, 14px) clamp(16px, 4vw, 20px) !important;
+    font-size: clamp(14px, 3vw, 15px) !important;
   }
 
   .input-field {
-    padding: 12px 14px;
+    padding: clamp(10px, 2.5vw, 14px) clamp(12px, 3vw, 16px);
     font-size: 15px;
   }
 
   .modal-box {
-    width: 90%;
+    width: min(90vw, 100% - 32px);
     max-width: none;
-    padding: 20px;
+    padding: clamp(16px, 4vw, 24px);
     border-radius: 14px;
   }
 
   .modal-overlay {
-    padding: 16px !important;
+    padding: clamp(12px, 3vw, 20px) !important;
   }
 
   /* ===== NAVBAR MOBILE ===== */
@@ -612,6 +693,7 @@ html.light .sidebar-link.active {
     font-family: var(--font-body);
     cursor: pointer;
     transition: background 0.2s;
+    touch-action: manipulation;
   }
 
   .drawer a:hover,
@@ -633,7 +715,7 @@ html.light .sidebar-link.active {
   }
 
   .hero-content {
-    padding: 16px !important;
+    padding: clamp(16px, 4vw, 20px) !important;
     padding-top: 90px !important;
     padding-bottom: 40px !important;
     text-align: center;
@@ -661,7 +743,7 @@ html.light .sidebar-link.active {
 
   /* ===== SECTIONS MOBILE ===== */
   section {
-    padding: 40px 16px !important;
+    padding: clamp(32px, 6vw, 40px) clamp(16px, 4vw, 20px) !important;
   }
 
   section#nosotros {
@@ -671,12 +753,12 @@ html.light .sidebar-link.active {
   .two-col-grid,
   .three-col-grid {
     grid-template-columns: 1fr !important;
-    gap: 16px !important;
+    gap: clamp(12px, 3vw, 16px) !important;
   }
 
   .glass-card {
     border-radius: 10px;
-    padding: 20px !important;
+    padding: clamp(16px, 4vw, 20px) !important;
   }
 
   img {
@@ -686,7 +768,7 @@ html.light .sidebar-link.active {
 
   /* ===== FOOTER MOBILE ===== */
   footer {
-    padding: 32px 16px !important;
+    padding: clamp(24px, 5vw, 32px) clamp(16px, 4vw, 20px) !important;
   }
 
   .footer-grid {
@@ -702,15 +784,5 @@ html.light .sidebar-link.active {
   /* ===== RESPONSIVE SPACING ===== */
   .modal-box {
     border-radius: 12px;
-  }
-
-  /* Prevent horizontal overflow */
-  * {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  body {
-    overflow-x: hidden;
   }
 }

@@ -16,6 +16,7 @@ const PublicDisponibilidad = () => {
     institucion: "",
     cantidadPersonas: 1,
   });
+  const [errors, setErrors] = useState({ institucion: "" });
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -59,13 +60,23 @@ const PublicDisponibilidad = () => {
     if (!bloqueSeleccionado?.hora) return toast.error("Selecciona horario");
     if (!form.institucion.trim()) return toast.error("Ingrese institución");
 
+    // front validation: institución mínimo 3 caracteres y caracteres permitidos
+    const instVal = (form.institucion || "").trim();
+    const instRegex = /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ&.,'\-\s]{3,}$/u;
+    if (!instRegex.test(instVal)) {
+      setErrors({
+        ...errors,
+        institucion: "Ingrese una institución válida (mín. 3 caracteres).",
+      });
+      return toast.error("Institución inválida (mín. 3 caracteres)");
+    }
     try {
       const cantPersonas = parseInt(form.cantidadPersonas, 10);
       if (isNaN(cantPersonas) || cantPersonas < 1 || cantPersonas > 20) {
         toast.error("Cantidad de personas inválida");
         return;
       }
-      
+
       console.log("Enviando payload público:", {
         institucion: form.institucion,
         cantidadPersonas: cantPersonas,
@@ -209,14 +220,33 @@ const PublicDisponibilidad = () => {
             >
               {/* Header */}
               <div style={{ marginBottom: "24px", textAlign: "center" }}>
-                <div style={{ fontSize: "12px", color: "var(--c-cyan)", letterSpacing: "2px", fontWeight: "600", marginBottom: "8px" }}>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: "var(--c-cyan)",
+                    letterSpacing: "2px",
+                    fontWeight: "600",
+                    marginBottom: "8px",
+                  }}
+                >
                   RESERVAR VISITA
                 </div>
-                <h2 style={{ fontSize: "24px", fontWeight: "700", color: "var(--text-primary)", margin: "0 0 8px 0" }}>
+                <h2
+                  style={{
+                    fontSize: "24px",
+                    fontWeight: "700",
+                    color: "var(--text-primary)",
+                    margin: "0 0 8px 0",
+                  }}
+                >
                   {bloqueSeleccionado?.hora}
                 </h2>
-                <div style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
-                  {bloqueSeleccionado?.disponibles} cupo{bloqueSeleccionado?.disponibles !== 1 ? "s" : ""} disponible{bloqueSeleccionado?.disponibles !== 1 ? "s" : ""}
+                <div
+                  style={{ fontSize: "13px", color: "var(--text-secondary)" }}
+                >
+                  {bloqueSeleccionado?.disponibles} cupo
+                  {bloqueSeleccionado?.disponibles !== 1 ? "s" : ""} disponible
+                  {bloqueSeleccionado?.disponibles !== 1 ? "s" : ""}
                 </div>
               </div>
 
@@ -236,22 +266,39 @@ const PublicDisponibilidad = () => {
                   alignItems: "flex-start",
                 }}
               >
-                <FaClipboardList style={{ color: "var(--c-cyan)", marginTop: "2px", flexShrink: 0 }} />
+                <FaClipboardList
+                  style={{
+                    color: "var(--c-cyan)",
+                    marginTop: "2px",
+                    flexShrink: 0,
+                  }}
+                />
                 <div>Completa los datos para finalizar tu reserva</div>
               </div>
 
               {/* Formulario */}
               <div style={{ marginBottom: "24px" }}>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "8px" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    color: "var(--text-primary)",
+                    marginBottom: "8px",
+                  }}
+                >
                   Institución
                 </label>
                 <input
                   type="text"
                   placeholder="Ej: Colegio San Francisco"
                   value={form.institucion}
-                  onChange={(e) =>
-                    setForm({ ...form, institucion: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setForm({ ...form, institucion: val });
+                    if (val.trim().length >= 3)
+                      setErrors({ ...errors, institucion: "" });
+                  }}
                   style={{
                     width: "100%",
                     padding: "12px 16px",
@@ -263,10 +310,29 @@ const PublicDisponibilidad = () => {
                     boxSizing: "border-box",
                   }}
                 />
+                {errors.institucion && (
+                  <div
+                    style={{
+                      color: "#E8166B",
+                      fontSize: "12px",
+                      marginTop: "8px",
+                    }}
+                  >
+                    {errors.institucion}
+                  </div>
+                )}
               </div>
 
               <div style={{ marginBottom: "28px" }}>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "8px" }}>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    color: "var(--text-primary)",
+                    marginBottom: "8px",
+                  }}
+                >
                   Cantidad de personas (1-20)
                 </label>
                 <input
@@ -275,7 +341,10 @@ const PublicDisponibilidad = () => {
                   max="20"
                   value={form.cantidadPersonas}
                   onChange={(e) =>
-                    setForm({ ...form, cantidadPersonas: parseInt(e.target.value, 10) || 1 })
+                    setForm({
+                      ...form,
+                      cantidadPersonas: parseInt(e.target.value, 10) || 1,
+                    })
                   }
                   style={{
                     width: "100%",
@@ -291,7 +360,14 @@ const PublicDisponibilidad = () => {
               </div>
 
               {/* Botones */}
-              <div style={{ display: "flex", gap: "12px", borderTop: "1px solid var(--border-color)", paddingTop: "20px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  borderTop: "1px solid var(--border-color)",
+                  paddingTop: "20px",
+                }}
+              >
                 <button
                   onClick={cerrarModal}
                   style={{
@@ -319,11 +395,16 @@ const PublicDisponibilidad = () => {
                 </button>
                 <button
                   onClick={reservar}
-                  disabled={!form.institucion.trim() || form.cantidadPersonas < 1 || form.cantidadPersonas > 20}
+                  disabled={
+                    !form.institucion.trim() ||
+                    form.cantidadPersonas < 1 ||
+                    form.cantidadPersonas > 20
+                  }
                   style={{
                     flex: 2,
                     padding: "12px 20px",
-                    background: "linear-gradient(135deg, var(--c-cyan), #00A89A)",
+                    background:
+                      "linear-gradient(135deg, var(--c-cyan), #00A89A)",
                     border: "none",
                     borderRadius: "10px",
                     color: "white",
@@ -334,7 +415,8 @@ const PublicDisponibilidad = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.transform = "translateY(-2px)";
-                    e.target.style.boxShadow = "0 10px 24px rgba(0,212,200,0.3)";
+                    e.target.style.boxShadow =
+                      "0 10px 24px rgba(0,212,200,0.3)";
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.transform = "none";

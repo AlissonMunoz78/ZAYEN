@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaArrowLeft, FaCalendar, FaClock, FaUsers, FaBuilding, FaCheckCircle, FaInfoCircle } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaCalendar,
+  FaClock,
+  FaUsers,
+  FaBuilding,
+  FaCheckCircle,
+  FaInfoCircle,
+} from "react-icons/fa";
 import api from "../../api/axios";
 
 const CreateVisita = () => {
@@ -12,6 +20,7 @@ const CreateVisita = () => {
     fechaVisita: "",
     horaBloque: "",
   });
+  const [errors, setErrors] = useState({ institucion: "" });
   const [disponibilidad, setDisponibilidad] = useState(null);
   const [loading, setLoading] = useState(false);
   const tomorrow = new Date();
@@ -21,6 +30,9 @@ const CreateVisita = () => {
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
+    if (name === "institucion" && (value || "").trim().length >= 3) {
+      setErrors({ ...errors, institucion: "" });
+    }
     if (name === "cantidadPersonas") {
       const n = Number(value);
       if (value !== "" && n > 20) {
@@ -40,6 +52,16 @@ const CreateVisita = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // validate institución
+    const instRegex = /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ&.,'\-\s]{3,}$/u;
+    if (!instRegex.test((form.institucion || "").trim())) {
+      setErrors({
+        ...errors,
+        institucion: "Ingrese una institución válida (mín. 3 caracteres).",
+      });
+      toast.error("Institución inválida (mín. 3 caracteres)");
+      return;
+    }
     if (Number(form.cantidadPersonas) > 20) {
       toast.error("El máximo permitido es de 20 personas por grupo");
       return;
@@ -82,10 +104,23 @@ const CreateVisita = () => {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg-primary)", padding: "20px" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "var(--bg-primary)",
+        padding: "20px",
+      }}
+    >
       <div style={{ maxWidth: "700px", margin: "0 auto" }}>
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "32px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+            marginBottom: "32px",
+          }}
+        >
           <button
             onClick={() => navigate("/visitas")}
             style={{
@@ -98,18 +133,36 @@ const CreateVisita = () => {
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              transition: "all 0.2s"
+              transition: "all 0.2s",
             }}
-            onMouseEnter={(e) => e.currentTarget.style.color = "var(--c-cyan)"}
-            onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-secondary)"}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = "var(--c-cyan)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = "var(--text-secondary)")
+            }
           >
             <FaArrowLeft /> Volver
           </button>
           <div>
-            <div style={{ fontSize: "12px", color: "var(--c-cyan)", letterSpacing: "2px", fontWeight: "600" }}>
+            <div
+              style={{
+                fontSize: "12px",
+                color: "var(--c-cyan)",
+                letterSpacing: "2px",
+                fontWeight: "600",
+              }}
+            >
               NUEVA VISITA
             </div>
-            <h1 style={{ fontSize: "28px", fontWeight: "700", color: "var(--text-primary)", margin: "4px 0 0 0" }}>
+            <h1
+              style={{
+                fontSize: "28px",
+                fontWeight: "700",
+                color: "var(--text-primary)",
+                margin: "4px 0 0 0",
+              }}
+            >
               Registrar Visita Grupal
             </h1>
           </div>
@@ -120,7 +173,8 @@ const CreateVisita = () => {
           style={{
             marginBottom: "24px",
             padding: "16px 20px",
-            background: "linear-gradient(135deg, rgba(0,212,200,0.1), rgba(107,53,200,0.05))",
+            background:
+              "linear-gradient(135deg, rgba(0,212,200,0.1), rgba(107,53,200,0.05))",
             border: "1px solid rgba(0,212,200,0.2)",
             borderRadius: "12px",
             fontSize: "14px",
@@ -131,9 +185,18 @@ const CreateVisita = () => {
             alignItems: "flex-start",
           }}
         >
-          <FaInfoCircle style={{ color: "var(--c-cyan)", marginTop: "2px", flexShrink: 0, fontSize: "16px" }} />
+          <FaInfoCircle
+            style={{
+              color: "var(--c-cyan)",
+              marginTop: "2px",
+              flexShrink: 0,
+              fontSize: "16px",
+            }}
+          />
           <div>
-            <strong>Visitantes:</strong> Entre 1 y 20 personas por grupo • <strong>Duración:</strong> Bloques de 30 minutos • <strong>Horario:</strong> Lunes a Viernes
+            <strong>Visitantes:</strong> Entre 1 y 20 personas por grupo •{" "}
+            <strong>Duración:</strong> Bloques de 30 minutos •{" "}
+            <strong>Horario:</strong> Lunes a Viernes
           </div>
         </div>
 
@@ -190,6 +253,17 @@ const CreateVisita = () => {
                 }}
                 required
               />
+              {errors.institucion && (
+                <div
+                  style={{
+                    color: "#E8166B",
+                    fontSize: "12px",
+                    marginTop: "8px",
+                  }}
+                >
+                  {errors.institucion}
+                </div>
+              )}
             </div>
 
             {/* Cantidad de Personas */}
@@ -206,9 +280,12 @@ const CreateVisita = () => {
                   letterSpacing: "0.5px",
                 }}
               >
-                <FaUsers style={{ color: "var(--c-cyan)" }} /> Cantidad de personas
+                <FaUsers style={{ color: "var(--c-cyan)" }} /> Cantidad de
+                personas
               </label>
-              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <div
+                style={{ display: "flex", gap: "8px", alignItems: "center" }}
+              >
                 <input
                   type="number"
                   name="cantidadPersonas"
@@ -267,7 +344,8 @@ const CreateVisita = () => {
                   letterSpacing: "0.5px",
                 }}
               >
-                <FaCalendar style={{ color: "var(--c-orange)" }} /> Fecha de visita
+                <FaCalendar style={{ color: "var(--c-orange)" }} /> Fecha de
+                visita
               </label>
               <input
                 type="date"
@@ -337,14 +415,23 @@ const CreateVisita = () => {
                     <button
                       key={b.hora}
                       type="button"
-                      onClick={() => setForm((f) => ({ ...f, horaBloque: b.hora }))}
+                      onClick={() =>
+                        setForm((f) => ({ ...f, horaBloque: b.hora }))
+                      }
                       style={{
                         padding: "14px 12px",
                         borderRadius: "10px",
-                        border: form.horaBloque === b.hora ? `2px solid ${colorMap[b.estado]}` : "1px solid var(--border-color)",
-                        background: form.horaBloque === b.hora ? `${colorMap[b.estado]}15` : "var(--bg-tertiary)",
+                        border:
+                          form.horaBloque === b.hora
+                            ? `2px solid ${colorMap[b.estado]}`
+                            : "1px solid var(--border-color)",
+                        background:
+                          form.horaBloque === b.hora
+                            ? `${colorMap[b.estado]}15`
+                            : "var(--bg-tertiary)",
                         color: colorMap[b.estado],
-                        cursor: b.estado === "completo" ? "not-allowed" : "pointer",
+                        cursor:
+                          b.estado === "completo" ? "not-allowed" : "pointer",
                         fontSize: "12px",
                         fontWeight: "600",
                         textAlign: "center",
@@ -368,7 +455,9 @@ const CreateVisita = () => {
                         {b.disponibles} libre{b.disponibles !== 1 ? "s" : ""}
                       </div>
                       {b.estado === "completo" && (
-                        <div style={{ fontSize: "9px", marginTop: "4px" }}>LLENO</div>
+                        <div style={{ fontSize: "9px", marginTop: "4px" }}>
+                          LLENO
+                        </div>
                       )}
                     </button>
                   ))}
@@ -422,7 +511,15 @@ const CreateVisita = () => {
             )}
 
             {/* Botones */}
-            <div style={{ display: "flex", gap: "12px", marginTop: "32px", paddingTop: "24px", borderTop: "1px solid var(--border-color)" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                marginTop: "32px",
+                paddingTop: "24px",
+                borderTop: "1px solid var(--border-color)",
+              }}
+            >
               <button
                 type="button"
                 onClick={() => navigate("/visitas")}
@@ -465,7 +562,9 @@ const CreateVisita = () => {
                 style={{
                   flex: 2,
                   padding: "13px 20px",
-                  background: loading ? "rgba(0,212,200,0.5)" : "linear-gradient(135deg, var(--c-cyan), #00A89A)",
+                  background: loading
+                    ? "rgba(0,212,200,0.5)"
+                    : "linear-gradient(135deg, var(--c-cyan), #00A89A)",
                   border: "none",
                   borderRadius: "10px",
                   color: "white",
@@ -478,7 +577,8 @@ const CreateVisita = () => {
                 onMouseEnter={(e) => {
                   if (!loading) {
                     e.target.style.transform = "translateY(-2px)";
-                    e.target.style.boxShadow = "0 10px 24px rgba(0,212,200,0.3)";
+                    e.target.style.boxShadow =
+                      "0 10px 24px rgba(0,212,200,0.3)";
                   }
                 }}
                 onMouseLeave={(e) => {

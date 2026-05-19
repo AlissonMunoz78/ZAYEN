@@ -31,6 +31,7 @@ const EditPasante = () => {
           celular: r.data.celular || "",
           facultad: r.data.facultad || "",
           horasDePasantia: r.data.horasDePasantia || 0,
+          activo: r.data.activo === false ? false : true,
         });
       })
       .catch(() => {
@@ -48,6 +49,7 @@ const EditPasante = () => {
           celular: form.celular,
           facultad: form.facultad,
           horasDePasantia: form.horasDePasantia,
+          activo: form.activo,
         }
       : { celular: form.celular };
     try {
@@ -152,6 +154,12 @@ const EditPasante = () => {
                 name="facultad"
                 value={form.facultad}
                 onChange={h}
+          <div style={{ marginTop: "10px" }}>
+            <strong style={{ color: "var(--text-primary)" }}>Estado:</strong>{" "}
+            <span style={{ color: pasante.activo === false ? "#E8166B" : "#00D4C8", fontWeight: 600 }}>
+              {pasante.activo === false ? "Inactivo" : "Activo"}
+            </span>
+          </div>
                 placeholder="Ingeniería de Sistemas"
                 className="input-field"
                 required
@@ -167,6 +175,18 @@ const EditPasante = () => {
                 className="input-field"
                 min="0"
               />
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+              <label className="field-label">Activo</label>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <input
+                  type="checkbox"
+                  name="activo"
+                  checked={!!form.activo}
+                  onChange={(e) => setForm({ ...form, activo: e.target.checked })}
+                />
+                <small style={{ color: "var(--text-secondary)" }}>Marcar si el pasante está activo</small>
+              </div>
             </div>
           </>
         )}

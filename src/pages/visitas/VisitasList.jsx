@@ -6,6 +6,7 @@ import {
   FaTimesCircle,
   FaCalendarAlt,
 } from "react-icons/fa";
+import { jsPDF } from "jspdf";
 import { toast } from "react-toastify";
 import api from "../../api/axios";
 import PageHeader from "../../components/PageHeader";
@@ -62,6 +63,39 @@ const VisitasList = () => {
     };
   };
 
+  const generatePDF = () => {
+    if (!visitas || visitas.length === 0) {
+      toast.info("No hay reservas para exportar");
+      return;
+    }
+    try {
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("Reporte de Reservas", 14, 20);
+      doc.setFontSize(11);
+      let y = 30;
+      visitas.forEach((v, i) => {
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.text(`${i + 1}. Institución: ${v.institucion || "-"}`, 14, y);
+        y += 6;
+        const fecha = v.fechaVisita || v.fecha || v.createdAt || "-";
+        doc.text(
+          `Fecha: ${fecha}    Hora: ${v.horaBloque || "-"}    Personas: ${v.cantidadPersonas || "-"}`,
+          14,
+          y,
+        );
+        y += 8;
+      });
+      const filename = `reservas_${new Date().toISOString().slice(0, 10)}.pdf`;
+      doc.save(filename);
+    } catch (e) {
+      toast.error("Error generando PDF");
+    }
+  };
+
   return (
     <div>
       <PageHeader
@@ -69,6 +103,21 @@ const VisitasList = () => {
         title="Visitas"
         action={
           <div style={{ display: "flex", gap: "12px" }}>
+            <button
+              onClick={generatePDF}
+              className="btn-outline"
+              style={{
+                textDecoration: "none",
+                padding: "10px 20px",
+                borderRadius: "8px",
+                fontSize: "13px",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <FaCalendarAlt size={12} /> Descargar PDF
+            </button>
             <Link
               to="/visitas/disponibilidad"
               className="btn-outline"
