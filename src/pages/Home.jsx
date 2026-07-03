@@ -146,6 +146,18 @@ export const Home = () => {
             gap: isMobile ? "10px" : "26px",
           }}
         >
+          <div
+            style={{
+              fontFamily: "var(--font-title)",
+              fontSize: isMobile ? "20px" : "34px",
+              fontWeight: 700,
+              color: "#fff",
+              letterSpacing: "2px",
+              marginRight: isMobile ? "6px" : "12px",
+            }}
+          >
+            ZAYEN
+          </div>
           <img
             src="/epn.png"
             alt="EPN"
@@ -180,7 +192,7 @@ export const Home = () => {
                   letterSpacing: "1.5px",
                 }}
               >
-                MUSEO
+                MUSEO DE HISTORIA NATURAL
               </div>
               <div
                 style={{
@@ -190,7 +202,7 @@ export const Home = () => {
                   letterSpacing: "2px",
                 }}
               >
-                GUSTAVO ORCÉS
+                " GUSTAVO ORCÉS V. "
               </div>
             </div>
           )}
@@ -547,7 +559,7 @@ export const Home = () => {
             borderTop: "1px solid var(--border-color)",
           }}
         >
-          Museo Gustavo Orcés · EPN
+          Museo de Historia Natural " Gustavo Orcés V."
         </div>
 
         {/* Animations */}
@@ -755,9 +767,10 @@ export const Home = () => {
           </h2>
           <div className="accent-line" />
           <p style={{ ...S.body, marginBottom: isMobile ? "24px" : "36px" }}>
-            El Museo Gustavo Orcés dedica sus esfuerzos a la ciencia y la
-            historia natural del Ecuador. Educamos, inspiramos y conectamos a
-            los visitantes con la riqueza biológica y paleontológica del país.
+            El Museo de Historia Natural " Gustavo Orcés V." dedica sus
+            esfuerzos a la ciencia y la historia natural del Ecuador. Educamos,
+            inspiramos y conectamos a los visitantes con la riqueza biológica y
+            paleontológica del país.
           </p>
           <div
             style={{ display: "flex", flexDirection: "column", gap: "18px" }}
@@ -1335,7 +1348,7 @@ export const Home = () => {
                 letterSpacing: "3px",
               }}
             >
-              MUSEO GUSTAVO ORCÉS · EPN
+              Museo de Historia Natural " Gustavo Orcés V."
             </div>
             <div
               style={{
@@ -1510,7 +1523,8 @@ export const Home = () => {
                 color: "var(--text-muted)",
               }}
             >
-              © 2025 Museo Gustavo Orcés · Escuela Politécnica Nacional
+              © 2026 Museo de Historia Natural " Gustavo Orcés V." · Escuela
+              Politécnica Nacional
             </p>
             <button
               onClick={() => setShowLogin(true)}
