@@ -117,7 +117,7 @@ const VisitasList = () => {
           </div>
         }
       />
-      <div className="glass-card" style={{ overflow: "hidden" }}>
+      <div className="glass-card" style={{ overflow: "hidden", width: "100%" }}>
         {loading ? (
           <div
             style={{
@@ -143,7 +143,9 @@ const VisitasList = () => {
             <tbody>
               {visitas.map((v) => (
                 <tr key={v.id}>
-                  <td style={{ fontWeight: "500" }}>{v.institucion}</td>
+                  <td style={{ fontWeight: "500", minWidth: "140px" }}>
+                    {v.institucion}
+                  </td>
                   <td style={{ color: "var(--text-secondary)" }}>
                     {v.fechaVisita}
                   </td>

@@ -5,7 +5,7 @@ import { MdMuseum } from "react-icons/md";
 import {
   FaMapMarkerAlt,
   FaClock,
-  FaPhone,
+  FaPhoneAlt,
   FaEnvelope,
   FaDonate,
   FaCalendarAlt,
@@ -813,7 +813,7 @@ export const Home = () => {
           style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-            gridTemplateRows: isMobile ? "auto" : "220px 220px",
+            gridAutoRows: isMobile ? "auto" : "minmax(240px, auto)",
             gap: "14px",
           }}
         >
@@ -823,9 +823,10 @@ export const Home = () => {
             style={{
               width: "100%",
               height: isMobile ? "250px" : "100%",
+              minHeight: isMobile ? "250px" : "0",
               objectFit: "cover",
               borderRadius: "12px",
-              gridRow: isMobile ? "auto" : "1/3",
+              gridRow: isMobile ? "auto" : "span 2",
             }}
           />
           <img
@@ -834,6 +835,7 @@ export const Home = () => {
             style={{
               width: "100%",
               height: isMobile ? "250px" : "100%",
+              minHeight: isMobile ? "250px" : "0",
               objectFit: "cover",
               borderRadius: "12px",
             }}
@@ -844,6 +846,7 @@ export const Home = () => {
             style={{
               width: "100%",
               height: isMobile ? "250px" : "100%",
+              minHeight: isMobile ? "250px" : "0",
               objectFit: "cover",
               borderRadius: "12px",
             }}
@@ -880,7 +883,7 @@ export const Home = () => {
               "Lunes a Viernes",
               "08:00 — 16:30 · Entrada gratuita",
             ],
-            [FaPhone, "Contacto", "info@museogustavorces.ec", "02 123 4567"],
+            [FaPhoneAlt, "Contacto", "info@museogustavorces.ec", "02 123 4567"],
           ].map(([Icon, title, l1, l2]) => (
             <div
               key={title}

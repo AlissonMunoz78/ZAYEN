@@ -121,11 +121,70 @@ h4 {
   -webkit-backdrop-filter: blur(20px);
   border: 0.5px solid var(--border-color);
   border-radius: 16px;
-  transition: background 0.25s, box-shadow 0.25s;
+  transition: transform 0.2s ease, background 0.25s, box-shadow 0.25s;
 }
 
 .glass-card:hover {
   background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.app-main {
+  padding: clamp(16px, 3vw, 32px);
+}
+
+.responsive-grid-3,
+.responsive-grid-2,
+.responsive-grid-1-2,
+.responsive-grid-1-1 {
+  display: grid;
+  gap: 20px;
+}
+
+.responsive-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.responsive-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.responsive-grid-1-2 {
+  grid-template-columns: 1fr 2fr;
+}
+
+.responsive-grid-1-1 {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 16px !important;
+  }
+
+  .responsive-grid-3,
+  .responsive-grid-2,
+  .responsive-grid-1-2,
+  .responsive-grid-1-1 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sidebar {
+    width: var(--sidebar-w-collapsed) !important;
+  }
+
+  .sidebar .sidebar-link span {
+    display: none !important;
+  }
+
+  .sidebar .sidebar-link {
+    justify-content: center !important;
+    padding: 13px 0 !important;
+  }
+
+  .sidebar>div {
+    padding: 16px 10px !important;
+  }
 }
 
 /* ===== BOTONES ===== */
@@ -540,6 +599,25 @@ html.light .sidebar-link.active {
     scroll-behavior: smooth;
   }
 
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header-action {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .page-header-action>* {
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-outline {
+    width: 100%;
+  }
+
   h1 {
     font-size: clamp(24px, 6vw, 40px) !important;
   }
@@ -614,7 +692,12 @@ html.light .sidebar-link.active {
 
   /* Hamburger button managed by React inline styles */
   .hamburger {
-    /* styles controlled by React */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
   }
 
   /* ===== DRAWER MENU ===== */
