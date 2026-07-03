@@ -143,18 +143,26 @@ export const Home = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: isMobile ? "6px" : "20px",
+            gap: isMobile ? "10px" : "26px",
           }}
         >
           <img
             src="/epn.png"
             alt="EPN"
-            style={{ height: isMobile ? "40px" : "58px", width: "auto" }}
+            style={{
+              height: isMobile ? "48px" : "78px",
+              width: "auto",
+              maxWidth: isMobile ? "130px" : "160px",
+            }}
           />
           <img
             src="/museo.png"
             alt="Museo"
-            style={{ height: isMobile ? "32px" : "58px", width: "auto" }}
+            style={{
+              height: isMobile ? "44px" : "78px",
+              width: "auto",
+              maxWidth: isMobile ? "140px" : "170px",
+            }}
           />
           {!isMobile && (
             <div

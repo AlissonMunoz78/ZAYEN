@@ -38,7 +38,7 @@
 
   --sidebar-w: 268px;
   --sidebar-w-collapsed: 68px;
-  
+
   /* Responsive spacing */
   --padding-mobile: 16px;
   --padding-tablet: 28px;
@@ -263,58 +263,19 @@ textarea.input-field {
   border-bottom: none;
 }
 
-/* Mobile table: convert to cards */
+/* Mobile table responsiveness */
 @media (max-width: 767px) {
-  .data-table,
-  .data-table thead,
-  .data-table tbody,
-  .data-table th,
-  .data-table td,
-  .data-table tr {
+  .data-table {
     display: block;
     width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .data-table thead {
-    display: none;
-  }
-
-  .data-table tbody tr {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 16px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 12px;
-    background: var(--bg-card);
-  }
-
-  .data-table tbody tr:hover {
-    background: var(--bg-card-hover);
-  }
-
+  .data-table th,
   .data-table td {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: none !important;
-    text-align: left;
-  }
-
-  .data-table td:before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: var(--text-secondary);
-    flex: 0 0 35%;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .data-table td > * {
-    flex: 1;
-    text-align: right;
+    white-space: nowrap;
+    padding: 14px 16px;
   }
 }
 
@@ -533,8 +494,10 @@ html.light .sidebar-link.active {
     height: 70px !important;
   }
 
+  /* Ajuste de imágenes del header: usaremos estilos específicos en cada componente */
   header img {
-    height: 45px !important;
+    width: auto;
+    max-height: 60px;
   }
 
   /* Section padding */
@@ -632,8 +595,8 @@ html.light .sidebar-link.active {
   }
 
   header img {
-    height: 40px !important;
     width: auto;
+    max-height: 60px;
   }
 
   .logo-text {
